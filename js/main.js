@@ -143,14 +143,12 @@ function renderDatasetDetail() {
     const mdPath = `md/${mdName}.md`;
     const root = document.getElementById('md-root');
     const titleEl = document.getElementById('md-title');
-    const card = document.querySelector('.dataset-card');
-    const header = document.querySelector('.dataset-header');
+    const mainContent = document.querySelector('.main-content');
 
-    if (!root || !card || !header) return;
+    if (!root || !mainContent) return;
 
-    // 加载前隐藏
-    card.classList.add('loading');
-    header.classList.add('loading');
+    // 整体隐藏
+    mainContent.classList.add('loading');
 
     Promise.all([
         ensureMarkedLoaded(),
@@ -172,9 +170,8 @@ function renderDatasetDetail() {
             }
             root.innerHTML = html;
 
-            // 加载完成后再显示
-            card.classList.remove('loading');
-            header.classList.remove('loading');
+            // 显示整个 main-content
+            mainContent.classList.remove('loading');
         })
         .catch(err => {
             if (document.body.contains(root)) {
@@ -184,10 +181,10 @@ function renderDatasetDetail() {
             console.error(err);
 
             // 即使失败也要显示
-            card.classList.remove('loading');
-            header.classList.remove('loading');
+            mainContent.classList.remove('loading');
         });
 }
+
 
 
 
