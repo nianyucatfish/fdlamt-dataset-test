@@ -132,6 +132,44 @@ function getHashAndQuery() {
 //         });
 // }
 
+// function renderDatasetDetail() {
+//     const { params } = getHashAndQuery();
+//     const mdName = params.get('md') || 'demo2';
+//     const mdPath = `md/${mdName}.md`;
+//     const root = document.getElementById('md-root');
+//     const titleEl = document.getElementById('md-title');
+//     if (!root) return;
+
+//     // 预处理：隐藏默认标题并显示加载占位，减少闪烁
+//     if (titleEl) titleEl.textContent = '';
+//     root.innerHTML = '<div class="md-skeleton"></div>';
+//     root.classList.add('loading');
+
+//     ensureMarkedLoaded()
+//         .then(() => fetch(mdPath))
+//         .then(res => {
+//             if (!res.ok) throw new Error('Markdown 加载失败');
+//             return res.text();
+//         })
+//         .then(text => {
+//             // 简单取第一行标题作为页面标题
+//             const firstLine = text.split('\n').find(l => l.trim().startsWith('# '));
+//             if (titleEl && firstLine) titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
+
+//             if (window.marked && typeof window.marked.parse === 'function') {
+//                 root.innerHTML = window.marked.parse(text, { gfm: true, breaks: true });
+//             } else {
+//                 root.textContent = text;
+//             }
+//             root.classList.remove('loading');
+//         })
+//         .catch(err => {
+//             if (root) root.innerHTML = '<p class="text-muted">内容加载失败或文档不存在。</p>';
+//             root.classList.remove('loading');
+//             console.error(err);
+//         });
+// }
+
 function renderDatasetDetail() {
     const { params } = getHashAndQuery();
     const mdName = params.get('md') || 'demo2';
@@ -140,32 +178,30 @@ function renderDatasetDetail() {
     const titleEl = document.getElementById('md-title');
     if (!root) return;
 
-    // 预处理：隐藏默认标题并显示加载占位，减少闪烁
-    if (titleEl) titleEl.textContent = '';
-    root.innerHTML = '<div class="md-skeleton"></div>';
-    root.classList.add('loading');
+    const rootRef = root; // 防止过程中节点被替换
 
-    ensureMarkedLoaded()
-        .then(() => fetch(mdPath))
-        .then(res => {
+    Promise.all([
+        ensureMarkedLoaded(),
+        fetch(mdPath).then(res => {
             if (!res.ok) throw new Error('Markdown 加载失败');
             return res.text();
         })
-        .then(text => {
-            // 简单取第一行标题作为页面标题
+    ])
+        .then(([_, text]) => {
             const firstLine = text.split('\n').find(l => l.trim().startsWith('# '));
-            if (titleEl && firstLine) titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
+            const html = (window.marked && typeof window.marked.parse === 'function')
+                ? window.marked.parse(text, { gfm: true, breaks: true })
+                : text.replace(/[&<>]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[s]));
 
-            if (window.marked && typeof window.marked.parse === 'function') {
-                root.innerHTML = window.marked.parse(text, { gfm: true, breaks: true });
-            } else {
-                root.textContent = text;
-            }
-            root.classList.remove('loading');
+            if (!document.body.contains(rootRef)) return; // 页面已切换则不写入
+            if (titleEl && firstLine) titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
+            rootRef.innerHTML = html;
         })
         .catch(err => {
-            if (root) root.innerHTML = '<p class="text-muted">内容加载失败或文档不存在。</p>';
-            root.classList.remove('loading');
+            if (document.body.contains(rootRef)) {
+                rootRef.innerHTML = '<p class="text-muted">内容加载失败或文档不存在。</p>';
+                if (titleEl) titleEl.textContent = '';
+            }
             console.error(err);
         });
 }
