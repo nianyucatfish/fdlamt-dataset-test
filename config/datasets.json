@@ -13,7 +13,7 @@
             "id": "demo-dataset-2",
             "name": "音乐数据集2",
             "description": "专门用于语音识别和自然语言处理研究的数据集。",
-            "image": "https://picsum.photos/seed/audio3/800/500",
+            "image": "./asset/古琴.jpg",
             "imageAlt": "数据集示意图",
             "mdFile": "demo2",
             "featured": false
@@ -22,7 +22,7 @@
             "id": "demo-dataset-3",
             "name": "音乐数据集3",
             "description": "专门用于语音识别和自然语言处理研究的数据集。",
-            "image": "https://picsum.photos/seed/audio3/800/500",
+            "image": "./asset/古琴.jpg",
             "imageAlt": "数据集示意图",
             "mdFile": "demo3",
             "featured": false
