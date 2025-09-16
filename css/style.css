@@ -14,6 +14,22 @@ body {
     display: flex;
 }
 
+/* 取消超链接样式 */
+a {
+    text-decoration: none;
+    /* 去掉下划线 */
+    color: inherit;
+    /* 继承父元素颜色，避免默认蓝色/紫色 */
+}
+
+/* 鼠标悬停时保持一致（可根据需要改颜色） */
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* 侧边栏固定 */
 .sidebar {
     position: fixed;
@@ -307,7 +323,7 @@ body {
 .dataset-header p {
     text-indent: 2em;
     max-width: 900px;
-    margin: 0.5rem auto 2rem;
+    margin: 0.5rem auto 1rem;
     color: #6b7280;
     line-height: 1.6;
     font-size: clamp(0.98rem, 0.92rem + 0.3vw, 1.15rem);
@@ -349,7 +365,7 @@ body {
 .divider {
     width: 100px;
     height: 3px;
-    margin: 0rem auto 4rem;
+    margin: 0rem auto 3rem;
     border-radius: 2px;
     background-color: #383F51;
     opacity: 0.5;
