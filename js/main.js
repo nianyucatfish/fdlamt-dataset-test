@@ -143,12 +143,14 @@ function renderDatasetDetail() {
     const mdPath = `md/${mdName}.md`;
     const root = document.getElementById('md-root');
     const titleEl = document.getElementById('md-title');
-    const card = document.querySelector('.dataset-card'); // 获取卡片
+    const card = document.querySelector('.dataset-card');
+    const header = document.querySelector('.dataset-header');
 
-    if (!root || !card) return;
+    if (!root || !card || !header) return;
 
-    // 加载前先隐藏卡片
+    // 加载前隐藏
     card.classList.add('loading');
+    header.classList.add('loading');
 
     Promise.all([
         ensureMarkedLoaded(),
@@ -163,12 +165,16 @@ function renderDatasetDetail() {
                 ? window.marked.parse(text, { gfm: true, breaks: true })
                 : text.replace(/[&<>]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[s]));
 
-            if (!document.body.contains(root)) return; // 页面切换了就不写入
-            if (titleEl && firstLine) titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
+            if (!document.body.contains(root)) return;
+
+            if (titleEl && firstLine) {
+                titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
+            }
             root.innerHTML = html;
 
-            // 渲染完成后再显示卡片
+            // 加载完成后再显示
             card.classList.remove('loading');
+            header.classList.remove('loading');
         })
         .catch(err => {
             if (document.body.contains(root)) {
@@ -177,10 +183,12 @@ function renderDatasetDetail() {
             }
             console.error(err);
 
-            // 即便失败也要显示卡片（避免永远隐藏）
+            // 即使失败也要显示
             card.classList.remove('loading');
+            header.classList.remove('loading');
         });
 }
+
 
 
 // function renderFromHash() {
