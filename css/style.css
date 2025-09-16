@@ -459,12 +459,16 @@ a:active {
 }
 
 /* 测试 */
-.dataset-card.loading {
+/* .dataset-card.loading {
     visibility: hidden;
     opacity: 0;
 }
 
 .dataset-header.loading {
+    visibility: hidden;
+    opacity: 0;
+} */
+.main-content.loading {
     visibility: hidden;
     opacity: 0;
 }
