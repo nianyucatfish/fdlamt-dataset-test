@@ -223,7 +223,7 @@ function renderDatasetList() {
     const grid = document.querySelector('.dataset-grid');
     if (!grid) return;
 
-    grid.innerHTML = '<div class="text-muted px-2">正在加载数据集...</div>';
+    // grid.innerHTML = '<div class="text-muted px-2">正在加载数据集...</div>';
 
     fetch('config/datasets.json')
         .then(res => {
