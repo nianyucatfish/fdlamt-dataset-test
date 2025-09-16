@@ -457,3 +457,9 @@ a:active {
     transform: translateY(-1px);
     color: #ffffff;
 }
+
+/* 测试 */
+.dataset-card.loading {
+    visibility: hidden;
+    opacity: 0;
+}
