@@ -1,5 +1,5 @@
 # AC-CCM
-此处维护了一个 markdown 渲染功能，有新数据集就写一个 markdown 文件就好。
+此处维护了一个 markdown 渲染功能，有新数据集写一个 markdown 文件就好。
 ## 1. 增加一个数据集的步骤
 1. 往 `datasets.json` 文件中补全数据集信息
 ```json
@@ -35,7 +35,7 @@
     ]
 }
 ```
-2. 新增对应的 markdown 文件
+2. 在 md 文件夹下新增对应的 markdown 文件
 3. 网页会自动生成数据集资料卡片以及详情页
 
 ## 2. 下面是 markdown 渲染效果的示例
@@ -62,3 +62,4 @@ python train.py --dataset demo2 --epochs 100
 <img src="../asset/古琴.jpg" alt="示例图片" width="300" />
 ```
 <img src="../asset/古琴.jpg" alt="示例图片" width="300" />
+
