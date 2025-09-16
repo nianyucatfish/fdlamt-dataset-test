@@ -59,9 +59,10 @@ python train.py --dataset demo2 --epochs 100
 ## 图片
 为避免显示大小问题，图片用 html 插入
 ```html
-<img src="../asset/古琴.jpg" alt="示例图片" width="300" />
+<img src="/fdlamt-dataset-test/asset/古琴.jpg" alt="示例图片" width="300" />
 ```
-<img src="/asset/古琴.jpg" alt="示例图片" width="300" />
+<img src="/fdlamt-dataset-test/asset/古琴.jpg" alt="示例图片" width="300" />
+
 
 
 
