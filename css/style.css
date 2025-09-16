@@ -463,3 +463,8 @@ a:active {
     visibility: hidden;
     opacity: 0;
 }
+
+.dataset-header.loading {
+    visibility: hidden;
+    opacity: 0;
+}
