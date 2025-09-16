@@ -1,55 +1,3 @@
-// function loadContent(url, link) {
-//     fetch(url)
-//         .then(response => response.text())
-//         .then(html => {
-//             document.getElementById('main-content').innerHTML = html;
-
-//             // 高亮当前选中导航
-//             document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
-//             if (link) link.classList.add('active');
-//         })
-//         .catch(err => {
-//             document.getElementById('main-content').innerHTML = "<p>加载失败</p>";
-//             console.error(err);
-//         });
-// }
-
-// // 基于 hash 渲染
-// const routes = {
-//     '#home': { url: 'content-home.html', index: 0 },
-//     '#dataset': { url: 'content-dataset.html', index: 1 },
-//     '#about': { url: 'content-about.html', index: 2 },
-//     '#contact': { url: 'content-connect_us.html', index: 3 }
-// };
-
-// function renderFromHash() {
-//     const hash = window.location.hash || '#home';
-//     const route = routes[hash] ? hash : '#home';
-//     const link = document.querySelectorAll('.nav-link')[routes[route].index];
-//     loadContent(routes[route].url, link);
-// }
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     renderFromHash();
-//     window.addEventListener('hashchange', renderFromHash);
-// });
-
-// function loadContent(url, link) {
-//     return fetch(url)
-//         .then(response => response.text())
-//         .then(html => {
-//             document.getElementById('main-content').innerHTML = html;
-
-//             // 高亮当前选中导航
-//             document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
-//             if (link) link.classList.add('active');
-//         })
-//         .catch(err => {
-//             document.getElementById('main-content').innerHTML = "<p>加载失败</p>";
-//             console.error(err);
-//         });
-// }
-
 function loadContent(url, link) {
     return fetch(url)
         .then(response => response.text())
@@ -59,11 +7,6 @@ function loadContent(url, link) {
             // 高亮当前选中导航
             document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
             if (link) link.classList.add('active');
-
-            // 若直接加载了数据集页，确保渲染卡片
-            if (typeof renderDatasetList === 'function' && url.indexOf('content-dataset.html') !== -1) {
-                renderDatasetList();
-            }
         })
         .catch(err => {
             document.getElementById('main-content').innerHTML = "<p>加载失败</p>";
@@ -71,7 +14,6 @@ function loadContent(url, link) {
         });
 }
 
-// 基于 hash 渲染
 const routes = {
     '#home': { url: 'content-home.html', index: 0 },
     '#dataset': { url: 'content-dataset.html', index: 1 },
@@ -101,42 +43,6 @@ function getHashAndQuery() {
     return { hash, params };
 }
 
-// function renderDatasetDetail() {
-//     const { params } = getHashAndQuery();
-//     const mdName = params.get('md') || 'demo2';
-//     const mdPath = `md/${mdName}.md`;
-//     const root = document.getElementById('md-root');
-//     const titleEl = document.getElementById('md-title');
-//     if (!root) return;
-
-//     const rootRef = root; // 防止过程中节点被替换
-
-//     Promise.all([
-//         ensureMarkedLoaded(),
-//         fetch(mdPath).then(res => {
-//             if (!res.ok) throw new Error('Markdown 加载失败');
-//             return res.text();
-//         })
-//     ])
-//         .then(([_, text]) => {
-//             const firstLine = text.split('\n').find(l => l.trim().startsWith('# '));
-//             const html = (window.marked && typeof window.marked.parse === 'function')
-//                 ? window.marked.parse(text, { gfm: true, breaks: true })
-//                 : text.replace(/[&<>]/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[s]));
-
-//             if (!document.body.contains(rootRef)) return; // 页面已切换则不写入
-//             if (titleEl && firstLine) titleEl.textContent = firstLine.replace(/^#\s*/, '').trim();
-//             rootRef.innerHTML = html;
-//         })
-//         .catch(err => {
-//             if (document.body.contains(rootRef)) {
-//                 rootRef.innerHTML = '<p class="text-muted">内容加载失败或文档不存在。</p>';
-//                 if (titleEl) titleEl.textContent = '';
-//             }
-//             console.error(err);
-//         });
-// }
-
 function renderDatasetDetail() {
     const { params } = getHashAndQuery();
     const mdName = params.get('md') || 'demo2';
@@ -147,7 +53,6 @@ function renderDatasetDetail() {
 
     if (!root || !mainContent) return;
 
-    // 整体隐藏
     mainContent.classList.add('loading');
 
     Promise.all([
@@ -170,7 +75,6 @@ function renderDatasetDetail() {
             }
             root.innerHTML = html;
 
-            // 显示整个 main-content
             mainContent.classList.remove('loading');
         })
         .catch(err => {
@@ -179,51 +83,18 @@ function renderDatasetDetail() {
                 if (titleEl) titleEl.textContent = '';
             }
             console.error(err);
-
-            // 即使失败也要显示
             mainContent.classList.remove('loading');
         });
 }
 
-
-
-
-// function renderFromHash() {
-//     const { hash } = getHashAndQuery();
-//     const routeKey = routes[hash] ? hash : (routes[hash.split('?')[0]] ? hash.split('?')[0] : '#home');
-//     const link = document.querySelectorAll('.nav-link')[routes[routeKey].index];
-//     loadContent(routes[routeKey].url, link).then(() => {
-//         if (routeKey === '#dataset-detail') {
-//             renderDatasetDetail();
-//         }
-//     });
-// }
-
-function renderFromHash() {
-    const { hash } = getHashAndQuery();
-    const routeKey = routes[hash] ? hash : (routes[hash.split('?')[0]] ? hash.split('?')[0] : '#home');
-    const link = document.querySelectorAll('.nav-link')[routes[routeKey].index];
-    loadContent(routes[routeKey].url, link).then(() => {
-        if (routeKey === '#dataset-detail') {
-            renderDatasetDetail();
-        }
-        if (routeKey === '#dataset') {
-            renderDatasetList();
-        }
-    });
-}
-
-// 页面加载时按 hash 渲染当前页，且支持前进/后退
-document.addEventListener("DOMContentLoaded", function () {
-    renderFromHash();
-    window.addEventListener('hashchange', renderFromHash);
-});
-
-function renderDatasetList() {
+function renderDatasetList(retry = 0) {
     const grid = document.querySelector('.dataset-grid');
-    if (!grid) return;
-
-    // grid.innerHTML = '<div class="text-muted px-2">正在加载数据集...</div>';
+    if (!grid) {
+        if (retry < 5) {
+            setTimeout(() => renderDatasetList(retry + 1), 50);
+        }
+        return;
+    }
 
     fetch('config/datasets.json')
         .then(res => {
@@ -269,20 +140,30 @@ function renderDatasetList() {
         });
 }
 
-// 统一接管 # 路由点击，确保 hash 正确更新
-document.body.addEventListener('click', function (e) {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-
-    const href = a.getAttribute('href') || '';
-    // 仅处理定义在 routes 中的路由以及详情页路由
-    if (routes[href] || href.startsWith('#dataset-detail')) {
-        e.preventDefault();
-        if (window.location.hash !== href) {
-            window.location.hash = href; // 触发 hashchange → renderFromHash
-        } else {
-            // 若与当前 hash 相同，主动重渲染一次
-            renderFromHash();
+function renderFromHash() {
+    const { hash } = getHashAndQuery();
+    const routeKey = routes[hash] ? hash : (routes[hash.split('?')[0]] ? hash.split('?')[0] : '#home');
+    const link = document.querySelectorAll('.nav-link')[routes[routeKey].index];
+    loadContent(routes[routeKey].url, link).then(() => {
+        if (routeKey === '#dataset-detail') {
+            renderDatasetDetail();
         }
-    }
+        if (routeKey === '#dataset') {
+            renderDatasetList();
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    renderFromHash();
+    window.addEventListener('hashchange', renderFromHash);
+
+    // 统一处理 #dataset 按钮点击
+    document.addEventListener("click", function (e) {
+        const target = e.target.closest('a[href="#dataset"]');
+        if (target) {
+            e.preventDefault();
+            window.location.hash = '#dataset';
+        }
+    });
 });
