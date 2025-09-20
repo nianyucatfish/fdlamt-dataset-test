@@ -77,7 +77,7 @@ const routes = {
     '#dataset': { url: 'content-dataset.html', index: 1 },
     '#dataset-detail': { url: 'content-dataset-detail.html', index: 1 },
     '#about': { url: 'content-about.html', index: 2 },
-    '#contact': { url: 'content-connect_us.html', index: 3 }
+    '#contact': { url: 'content-connect-us.html', index: 3 }
 };
 
 function ensureMarkedLoaded() {
@@ -286,3 +286,4 @@ document.body.addEventListener('click', function (e) {
         }
     }
 });
+
