@@ -1,6 +1,5 @@
 # AC-CCM
 https://huggingface.co/datasets/catfishny/xishanqinkuang_test
-此处维护了一个 markdown 渲染功能，有新数据集就写一个 markdown 文件就好。
 ## 1. 增加一个数据集的步骤
 1. 往 `datasets.json` 文件中补全数据集信息
 ```json
@@ -62,3 +61,4 @@ python train.py --dataset demo2 --epochs 100
 <img src="../asset/古琴.jpg" alt="示例图片" width="300" />
 ```
 <img src="../asset/古琴.jpg" alt="示例图片" width="300" />
+
